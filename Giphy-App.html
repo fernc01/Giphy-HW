@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Giphy App</title>
+</head>
+
+<body>
+    <!--create word array
+        
+        create buttons with for loop
+        
+        on button click, show giphy results
+        
+        input text box
+    
+        on submit click, add button -->
+       
+        <div id="buttonsPlace"></div>
+        <form id="addButtonForm"> 
+        <label for="buttonInput">Add a type of sport</label>
+        <input type="text" id="buttonInput"><br>
+
+        <input id="submitButton" type="submit" value="Add a sport">
+        </form>
+
+        <div id="gifsPlace"></div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript"> 
+
+        var sportsArray = ["Hockey", "Soccer", "Baseball", "Basketball", "Swimming"];
+        var sport = $("#buttonInput").val().trim();
+        var buttons = $("<button>");
+        
+
+        function createButtons() {
+
+            $("#buttonsPlace").empty();
+
+            for(var i = 0; i < sportsArray.length; i++){
+
+                var buttons = $("<button>");
+                $(this).attr("id",sportsArray[i]);
+                    console.log(this.id)
+                buttons.text(sportsArray[i]);
+
+                $("#buttonsPlace").append(buttons);
+                
+            }
+        }
+
+        createButtons();
+
+        $("#submitButton").on("click", function(event) {
+        event.preventDefault();
+        
+        var sport = $("#buttonInput").val().trim();
+
+        
+        sportsArray.push(sport);
+
+        
+        createButtons();
+      });
+
+     $("button").on("click", function(){
+        console.log(this.id);
+        $.get({
+        
+        url: "https://api.giphy.com/v1/gifs/search?q="+ $(this.id) +"&api_key=hdt6UwXFi5v9RJLENVaOeSQ079krNFLx&limit=10",
+        
+        success: function(result) {
+         
+          console.log(result)
+          var data = result.data;
+          var output = "";
+          for (var index in data){
+              var gifObject = data[index];
+              var gifURL = gifObject.images.original.url;
+              console.log(gifURL);
+              output += "<img width='200px' src='"+gifURL+"'/>";
+          }
+          $("#gifsPlace").html(output);
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
+  });
+         
+         //});
+
+
+         
+          
+
+         $.get({
+        
+  url: "https://api.giphy.com/v1/gifs/search?q=hockey&api_key=dc6zaTOxFJmzC&rating=pg&limit=10",
+  success: function(result) {
+    console.log(result)
+    var data = result.data;
+    var output = "";
+    for (var index in data){
+        var gifObject = data[index];
+        var gifURL = gifObject.images.original.url;
+        console.log(gifURL);
+        output += "<img width='200px' src='"+gifURL+"'/>";
+    }
+    $("#gifsPlace").html(output);
+  },
+  error: function(error) {
+    console.log(error);
+  }
+});
+      //});
+      
+
+
+
+
+        
+        </script>
+</body>
